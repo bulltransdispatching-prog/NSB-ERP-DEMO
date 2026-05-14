@@ -1,0 +1,3563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSB ERP DEMO - Audit & Inspection Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a237e;
+            --primary-light: #3949ab;
+            --secondary: #ff6f00;
+            --success: #2e7d32;
+            --danger: #c62828;
+            --warning: #f9a825;
+            --info: #0277bd;
+            --dark: #212121;
+            --light: #f5f5f5;
+            --white: #ffffff;
+            --gray: #9e9e9e;
+            --border: #e0e0e0;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.15);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        /* LOGIN PAGE */
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, #0d47a1 50%, #01579b 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-page::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 50%;
+            top: -200px;
+            right: -200px;
+        }
+
+        .login-page::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            bottom: -100px;
+            left: -100px;
+        }
+
+        .login-container {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 50px 40px;
+            width: 420px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .login-logo .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 36px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .login-logo h1 {
+            color: var(--primary);
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .login-logo p {
+            color: var(--gray);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 14px;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s;
+            outline: none;
+            font-family: inherit;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26,35,126,0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            width: 100%;
+            justify-content: center;
+            padding: 14px;
+            font-size: 16px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(26,35,126,0.3);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #1b5e20;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: var(--dark);
+        }
+
+        .btn-info {
+            background: var(--info);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--gray);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 8px 16px;
+            font-size: 12px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .login-role {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .role-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .role-btn.active {
+            border-color: var(--primary);
+            background: rgba(26,35,126,0.05);
+            color: var(--primary);
+        }
+
+        .role-btn:hover {
+            border-color: var(--primary);
+        }
+
+        .role-icon {
+            font-size: 24px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* MAIN LAYOUT */
+        .app-layout {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 260px;
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary) 0%, #0d1b4a 100%);
+            color: white;
+            overflow-y: auto;
+            z-index: 100;
+            transition: all 0.3s;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-header h2 {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .sidebar-header small {
+            color: rgba(255,255,255,0.6);
+            font-size: 11px;
+        }
+
+        .sidebar-menu {
+            padding: 10px 0;
+        }
+
+        .menu-category {
+            padding: 10px 20px 5px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.4);
+            font-weight: 600;
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+            font-size: 14px;
+        }
+
+        .menu-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .menu-item.active {
+            background: rgba(255,255,255,0.15);
+            border-left-color: var(--secondary);
+        }
+
+        .menu-item .menu-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            min-height: 100vh;
+        }
+
+        .topbar {
+            background: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .topbar-left h2 {
+            font-size: 20px;
+            color: var(--dark);
+        }
+
+        .topbar-left p {
+            font-size: 13px;
+            color: var(--gray);
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 15px;
+            background: var(--light);
+            border-radius: 10px;
+        }
+
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 8px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 18px;
+            height: 18px;
+            background: var(--danger);
+            border-radius: 50%;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .page-content {
+            padding: 30px;
+        }
+
+        .page-section {
+            display: none;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        /* DASHBOARD */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            border-radius: 0 0 0 100%;
+            opacity: 0.1;
+        }
+
+        .stat-card.blue::after { background: var(--primary); }
+        .stat-card.green::after { background: var(--success); }
+        .stat-card.orange::after { background: var(--secondary); }
+        .stat-card.red::after { background: var(--danger); }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+
+        .stat-card.blue .stat-icon { background: rgba(26,35,126,0.1); color: var(--primary); }
+        .stat-card.green .stat-icon { background: rgba(46,125,50,0.1); color: var(--success); }
+        .stat-card.orange .stat-icon { background: rgba(255,111,0,0.1); color: var(--secondary); }
+        .stat-card.red .stat-icon { background: rgba(198,40,40,0.1); color: var(--danger); }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--gray);
+            margin-top: 5px;
+        }
+
+        .stat-change {
+            font-size: 12px;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .stat-change.up { color: var(--success); }
+        .stat-change.down { color: var(--danger); }
+
+        /* CARDS */
+        .card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        /* TABLES */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th {
+            background: var(--light);
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--dark);
+            white-space: nowrap;
+        }
+
+        table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border);
+            font-size: 13px;
+        }
+
+        table tr:hover {
+            background: rgba(26,35,126,0.02);
+        }
+
+        .badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .badge-success { background: rgba(46,125,50,0.1); color: var(--success); }
+        .badge-danger { background: rgba(198,40,40,0.1); color: var(--danger); }
+        .badge-warning { background: rgba(249,168,37,0.1); color: #e65100; }
+        .badge-info { background: rgba(2,119,189,0.1); color: var(--info); }
+        .badge-primary { background: rgba(26,35,126,0.1); color: var(--primary); }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: none;
+            background: var(--light);
+            cursor: pointer;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-body {
+            padding: 25px;
+        }
+
+        .modal-footer {
+            padding: 15px 25px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* GRID LAYOUTS */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        /* CHECKLIST */
+        .checklist-section {
+            margin-bottom: 25px;
+        }
+
+        .checklist-section h4 {
+            padding: 10px 15px;
+            background: var(--light);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border);
+            gap: 10px;
+        }
+
+        .checklist-item label {
+            flex: 1;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .checklist-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--success);
+        }
+
+        .checklist-item select {
+            padding: 5px 10px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .checklist-item input[type="text"] {
+            padding: 5px 10px;
+            border: 1px solid var(--border);
+            border-radius: 5px;
+            font-size: 12px;
+            width: 150px;
+        }
+
+        /* CHART CONTAINERS */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            gap: 15px;
+            height: 250px;
+            padding: 20px 0;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .bar-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .bar {
+            width: 40px;
+            border-radius: 8px 8px 0 0;
+            transition: height 1s ease;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .bar:hover {
+            opacity: 0.8;
+        }
+
+        .bar-label {
+            font-size: 11px;
+            color: var(--gray);
+            text-align: center;
+        }
+
+        .bar-value {
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* SCORE CIRCLE */
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .score-circle::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 8px solid var(--border);
+        }
+
+        .score-high { color: var(--success); }
+        .score-high::before { border-color: rgba(46,125,50,0.2); border-top-color: var(--success); border-right-color: var(--success); border-bottom-color: var(--success); }
+        .score-medium { color: var(--warning); }
+        .score-medium::before { border-color: rgba(249,168,37,0.2); border-top-color: var(--warning); border-right-color: var(--warning); }
+        .score-low { color: var(--danger); }
+        .score-low::before { border-color: rgba(198,40,40,0.2); border-top-color: var(--danger); }
+
+        /* GPS */
+        .gps-info {
+            background: var(--light);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .gps-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .gps-icon.inactive { background: var(--gray); }
+        .gps-icon.active { background: var(--success); animation: pulse 2s infinite; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(46,125,50,0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(46,125,50,0); }
+            100% { box-shadow: 0 0 0 0 rgba(46,125,50,0); }
+        }
+
+        /* TABS */
+        .tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* SEARCH & FILTER */
+        .toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .filter-select {
+            padding: 10px 15px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            outline: none;
+            font-size: 14px;
+            min-width: 150px;
+        }
+
+        /* PROGRESS BAR */
+        .progress-bar {
+            height: 8px;
+            background: var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 1s ease;
+        }
+
+        .progress-fill.green { background: var(--success); }
+        .progress-fill.yellow { background: var(--warning); }
+        .progress-fill.red { background: var(--danger); }
+        .progress-fill.blue { background: var(--info); }
+
+        /* TIMELINE */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 25px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -24px;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--primary);
+            border: 2px solid white;
+        }
+
+        .timeline-item .time {
+            font-size: 12px;
+            color: var(--gray);
+        }
+
+        .timeline-item .content {
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+        /* PRINT STYLES */
+        .print-only {
+            display: none;
+        }
+
+        /* TOAST */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+        }
+
+        .toast {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+            min-width: 300px;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .toast.success { border-left: 4px solid var(--success); }
+        .toast.error { border-left: 4px solid var(--danger); }
+        .toast.warning { border-left: 4px solid var(--warning); }
+        .toast.info { border-left: 4px solid var(--info); }
+
+        /* ATTENDANCE MAP PLACEHOLDER */
+        .map-container {
+            width: 100%;
+            height: 300px;
+            background: #e8eaf6;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-pin {
+            position: absolute;
+            font-size: 30px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .map-pin:hover {
+            transform: scale(1.3);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .login-container {
+                width: 95%;
+                padding: 30px 20px;
+            }
+        }
+
+        /* INSPECTION FORM SECTIONS */
+        .form-section {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .form-section-header {
+            background: var(--light);
+            padding: 12px 15px;
+            font-weight: 600;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .form-section-body {
+            padding: 15px;
+        }
+
+        /* SCORE DISPLAY */
+        .score-display {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: var(--light);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .donut-chart {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        /* action buttons group */
+        .action-btns {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .btn-icon.edit { background: rgba(2,119,189,0.1); color: var(--info); }
+        .btn-icon.delete { background: rgba(198,40,40,0.1); color: var(--danger); }
+        .btn-icon.view { background: rgba(46,125,50,0.1); color: var(--success); }
+        .btn-icon:hover { transform: scale(1.1); }
+
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .sidebar-user {
+            padding: 15px 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .sidebar-user .user-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .sidebar-user .user-role-label {
+            font-size: 11px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* Trend arrows */
+        .trend-up { color: var(--success); }
+        .trend-down { color: var(--danger); }
+
+        .flex-between {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .mt-10 { margin-top: 10px; }
+        .mt-20 { margin-top: 20px; }
+        .mb-10 { margin-bottom: 10px; }
+        .mb-20 { margin-bottom: 20px; }
+
+        .hidden { display: none !important; }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        /* Hover card for customer detail */
+        .customer-detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .detail-item {
+            padding: 12px;
+            background: var(--light);
+            border-radius: 8px;
+        }
+
+        .detail-item label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--gray);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .detail-item span {
+            font-size: 14px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOAST CONTAINER -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- LOGIN PAGE -->
+    <div class="login-page" id="loginPage">
+        <div class="login-container">
+            <div class="login-logo">
+                <div class="logo-icon">NSB</div>
+                <h1>NSB ERP DEMO</h1>
+                <p>Audit & Inspection Management System</p>
+            </div>
+
+            <div class="login-role">
+                <div class="role-btn active" onclick="selectRole('admin')" id="roleAdmin">
+                    <span class="role-icon">👑</span>
+                    Admin
+                </div>
+                <div class="role-btn" onclick="selectRole('auditor')" id="roleAuditor">
+                    <span class="role-icon">🔍</span>
+                    Auditor
+                </div>
+                <div class="role-btn" onclick="selectRole('customer')" id="roleCustomer">
+                    <span class="role-icon">🏢</span>
+                    Customer
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Username / Email</label>
+                <input type="text" id="loginEmail" placeholder="Enter your email" value="admin@nsb.com">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password" value="admin123">
+            </div>
+            <button class="btn btn-primary" onclick="handleLogin()">
+                🔐 Sign In to Dashboard
+            </button>
+            <p style="text-align:center;margin-top:15px;font-size:12px;color:var(--gray)">
+                Demo: Use any credentials to login
+            </p>
+        </div>
+    </div>
+
+    <!-- MAIN APPLICATION -->
+    <div class="app-layout" id="appLayout">
+        <!-- SIDEBAR -->
+        <nav class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>🏗️ NSB ERP</h2>
+                <small>Audit & Inspection System v2.0</small>
+            </div>
+            <div class="sidebar-menu">
+                <div class="menu-category">Main</div>
+                <div class="menu-item active" onclick="showPage('dashboard')" data-page="dashboard">
+                    <span class="menu-icon">📊</span> Dashboard
+                </div>
+
+                <div class="menu-category">Inspections</div>
+                <div class="menu-item" onclick="showPage('inspections')" data-page="inspections">
+                    <span class="menu-icon">📋</span> All Inspections
+                </div>
+                <div class="menu-item" onclick="showPage('newInspection')" data-page="newInspection">
+                    <span class="menu-icon">➕</span> New Inspection
+                </div>
+                <div class="menu-item" onclick="showPage('checklists')" data-page="checklists">
+                    <span class="menu-icon">✅</span> Checklists / Standards
+                </div>
+
+                <div class="menu-category">Customers</div>
+                <div class="menu-item" onclick="showPage('customers')" data-page="customers">
+                    <span class="menu-icon">🏢</span> Customer Management
+                </div>
+                <div class="menu-item" onclick="showPage('payments')" data-page="payments">
+                    <span class="menu-icon">💳</span> Payments
+                </div>
+
+                <div class="menu-category">Analytics</div>
+                <div class="menu-item" onclick="showPage('trends')" data-page="trends">
+                    <span class="menu-icon">📈</span> Trend Analysis
+                </div>
+                <div class="menu-item" onclick="showPage('reports')" data-page="reports">
+                    <span class="menu-icon">📄</span> Reports
+                </div>
+
+                <div class="menu-category">Attendance</div>
+                <div class="menu-item" onclick="showPage('attendance')" data-page="attendance">
+                    <span class="menu-icon">📍</span> GPS Attendance
+                </div>
+
+                <div class="menu-category admin-only">Administration</div>
+                <div class="menu-item admin-only" onclick="showPage('adminPanel')" data-page="adminPanel">
+                    <span class="menu-icon">⚙️</span> Admin Panel
+                </div>
+                <div class="menu-item admin-only" onclick="showPage('locations')" data-page="locations">
+                    <span class="menu-icon">🗺️</span> Location Management
+                </div>
+                <div class="menu-item admin-only" onclick="showPage('users')" data-page="users">
+                    <span class="menu-icon">👥</span> User Management
+                </div>
+            </div>
+
+            <div class="sidebar-user">
+                <div class="user-name" id="sidebarUserName">Admin User</div>
+                <div class="user-role-label" id="sidebarUserRole">Administrator</div>
+            </div>
+        </nav>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <div class="topbar">
+                <div class="topbar-left">
+                    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                    <h2 id="pageTitle">Dashboard</h2>
+                    <p id="pageSubtitle">Overview of audit activities</p>
+                </div>
+                <div class="topbar-right">
+                    <div class="notification-bell" onclick="showNotifications()">
+                        🔔
+                        <span class="notification-badge">3</span>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-avatar" id="topUserAvatar">A</div>
+                        <div>
+                            <div style="font-weight:600;font-size:13px" id="topUserName">Admin</div>
+                            <div style="font-size:11px;color:var(--gray)" id="topUserRole">Administrator</div>
+                        </div>
+                    </div>
+                    <button class="logout-btn" onclick="handleLogout()">🚪 Logout</button>
+                </div>
+            </div>
+
+            <div class="page-content">
+                <!-- ==================== DASHBOARD ==================== -->
+                <div class="page-section active" id="page-dashboard">
+                    <div class="stats-grid">
+                        <div class="stat-card blue">
+                            <div class="stat-icon">📋</div>
+                            <div class="stat-value" id="totalInspections">47</div>
+                            <div class="stat-label">Total Inspections</div>
+                            <div class="stat-change up">↑ 12% from last month</div>
+                        </div>
+                        <div class="stat-card green">
+                            <div class="stat-icon">✅</div>
+                            <div class="stat-value" id="completedInspections">38</div>
+                            <div class="stat-label">Completed</div>
+                            <div class="stat-change up">↑ 8% from last month</div>
+                        </div>
+                        <div class="stat-card orange">
+                            <div class="stat-icon">🏢</div>
+                            <div class="stat-value" id="totalCustomers">24</div>
+                            <div class="stat-label">Active Customers</div>
+                            <div class="stat-change up">↑ 3 new this month</div>
+                        </div>
+                        <div class="stat-card red">
+                            <div class="stat-icon">⚠️</div>
+                            <div class="stat-value" id="pendingActions">5</div>
+                            <div class="stat-label">Pending Actions</div>
+                            <div class="stat-change down">↓ Needs attention</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>📈 Inspection Scores Trend</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="bar-chart" id="dashboardChart">
+                                    <div class="bar-group">
+                                        <div class="bar-value">85%</div>
+                                        <div class="bar" style="height:170px;background:var(--primary)"></div>
+                                        <div class="bar-label">Jan</div>
+                                    </div>
+                                    <div class="bar-group">
+                                        <div class="bar-value">78%</div>
+                                        <div class="bar" style="height:156px;background:var(--primary)"></div>
+                                        <div class="bar-label">Feb</div>
+                                    </div>
+                                    <div class="bar-group">
+                                        <div class="bar-value">92%</div>
+                                        <div class="bar" style="height:184px;background:var(--success)"></div>
+                                        <div class="bar-label">Mar</div>
+                                    </div>
+                                    <div class="bar-group">
+                                        <div class="bar-value">88%</div>
+                                        <div class="bar" style="height:176px;background:var(--primary)"></div>
+                                        <div class="bar-label">Apr</div>
+                                    </div>
+                                    <div class="bar-group">
+                                        <div class="bar-value">95%</div>
+                                        <div class="bar" style="height:190px;background:var(--success)"></div>
+                                        <div class="bar-label">May</div>
+                                    </div>
+                                    <div class="bar-group">
+                                        <div class="bar-value">91%</div>
+                                        <div class="bar" style="height:182px;background:var(--success)"></div>
+                                        <div class="bar-label">Jun</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>🕐 Recent Activities</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="timeline">
+                                    <div class="timeline-item">
+                                        <div class="time">Today, 10:30 AM</div>
+                                        <div class="content">✅ ISO 9001 inspection completed for <strong>Alpha Foods Ltd</strong></div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="time">Today, 9:15 AM</div>
+                                        <div class="content">📍 GPS check-in at <strong>Beta Manufacturing</strong></div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="time">Yesterday, 4:00 PM</div>
+                                        <div class="content">💳 Payment received from <strong>Gamma Industries</strong> - $2,500</div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="time">Yesterday, 11:00 AM</div>
+                                        <div class="content">⚠️ HACCP non-compliance found at <strong>Delta Foods</strong></div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="time">2 days ago</div>
+                                        <div class="content">📋 New ISO 14001 audit scheduled for <strong>Epsilon Corp</strong></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📋 Upcoming Inspections</h3>
+                            <button class="btn btn-sm btn-primary" onclick="showPage('newInspection')">+ New Inspection</button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Customer</th>
+                                            <th>Type</th>
+                                            <th>Date</th>
+                                            <th>Auditor</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#INS-048</td>
+                                            <td>Omega Foods Pvt Ltd</td>
+                                            <td><span class="badge badge-primary">ISO 9001</span></td>
+                                            <td>2025-07-20</td>
+                                            <td>John Smith</td>
+                                            <td><span class="badge badge-warning">Scheduled</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>#INS-049</td>
+                                            <td>Sunrise Dairy</td>
+                                            <td><span class="badge badge-danger">HACCP</span></td>
+                                            <td>2025-07-22</td>
+                                            <td>Sarah Johnson</td>
+                                            <td><span class="badge badge-warning">Scheduled</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>#INS-050</td>
+                                            <td>Green Valley Farms</td>
+                                            <td><span class="badge badge-success">ISO 14001</span></td>
+                                            <td>2025-07-25</td>
+                                            <td>Mike Davis</td>
+                                            <td><span class="badge badge-info">In Progress</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== ALL INSPECTIONS ==================== -->
+                <div class="page-section" id="page-inspections">
+                    <div class="toolbar">
+                        <div class="search-box">
+                            <input type="text" placeholder="Search inspections..." id="inspectionSearch" oninput="filterInspections()">
+                        </div>
+                        <select class="filter-select" id="inspectionTypeFilter" onchange="filterInspections()">
+                            <option value="">All Types</option>
+                            <option value="ISO 9001">ISO 9001 QMS</option>
+                            <option value="HACCP">HACCP</option>
+                            <option value="ISO 14001">ISO 14001 EMS</option>
+                            <option value="Food Safety">Food Safety</option>
+                            <option value="Fire Safety">Fire Safety</option>
+                        </select>
+                        <select class="filter-select" id="inspectionStatusFilter" onchange="filterInspections()">
+                            <option value="">All Status</option>
+                            <option value="Completed">Completed</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Scheduled">Scheduled</option>
+                            <option value="Failed">Failed</option>
+                        </select>
+                        <button class="btn btn-sm btn-primary" onclick="showPage('newInspection')">➕ New Inspection</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Customer</th>
+                                            <th>Type</th>
+                                            <th>Standard</th>
+                                            <th>Date</th>
+                                            <th>Auditor</th>
+                                            <th>Score</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="inspectionsTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== NEW INSPECTION ==================== -->
+                <div class="page-section" id="page-newInspection">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📝 Create New Inspection</h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- GPS Attendance for this inspection -->
+                            <div class="gps-info">
+                                <div class="gps-icon" id="inspGpsIcon">📍</div>
+                                <div>
+                                    <strong>GPS Location Check-In</strong>
+                                    <div id="inspGpsStatus" style="font-size:13px;color:var(--gray)">Click to capture your current location</div>
+                                    <div id="inspGpsCoords" style="font-size:12px;color:var(--info)"></div>
+                                </div>
+                                <button class="btn btn-sm btn-success" onclick="captureGPS('inspection')" style="margin-left:auto">📍 Check-In</button>
+                            </div>
+
+                            <div class="grid-2">
+                                <div class="form-group">
+                                    <label>Customer / Business</label>
+                                    <select id="inspCustomer">
+                                        <option value="">Select Customer</option>
+                                        <option value="Alpha Foods Ltd">Alpha Foods Ltd</option>
+                                        <option value="Beta Manufacturing">Beta Manufacturing</option>
+                                        <option value="Gamma Industries">Gamma Industries</option>
+                                        <option value="Delta Foods">Delta Foods</option>
+                                        <option value="Epsilon Corp">Epsilon Corp</option>
+                                        <option value="Omega Foods Pvt Ltd">Omega Foods Pvt Ltd</option>
+                                        <option value="Sunrise Dairy">Sunrise Dairy</option>
+                                        <option value="Green Valley Farms">Green Valley Farms</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Inspection Type / Standard</label>
+                                    <select id="inspType" onchange="loadChecklist()">
+                                        <option value="">Select Standard</option>
+                                        <option value="ISO 9001">ISO 9001 - Quality Management System</option>
+                                        <option value="HACCP">HACCP - Hazard Analysis Critical Control Points</option>
+                                        <option value="ISO 14001">ISO 14001 - Environmental Management</option>
+                                        <option value="Food Safety">Food Safety Compliance</option>
+                                        <option value="Fire Safety">Fire Safety Inspection</option>
+                                        <option value="ISO 22000">ISO 22000 - Food Safety Management</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Inspection Date</label>
+                                    <input type="date" id="inspDate">
+                                </div>
+                                <div class="form-group">
+                                    <label>Auditor Name</label>
+                                    <select id="inspAuditor">
+                                        <option value="">Select Auditor</option>
+                                        <option value="John Smith">John Smith</option>
+                                        <option value="Sarah Johnson">Sarah Johnson</option>
+                                        <option value="Mike Davis">Mike Davis</option>
+                                        <option value="Emily Wilson">Emily Wilson</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Domain / Sector</label>
+                                    <select id="inspDomain">
+                                        <option value="">Select Domain</option>
+                                        <option value="Food Factory">Food Factory</option>
+                                        <option value="Manufacturing">Manufacturing</option>
+                                        <option value="Dairy">Dairy</option>
+                                        <option value="Agriculture">Agriculture</option>
+                                        <option value="Pharmaceutical">Pharmaceutical</option>
+                                        <option value="Chemical">Chemical</option>
+                                        <option value="Construction">Construction</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Priority</label>
+                                    <select id="inspPriority">
+                                        <option value="Normal">Normal</option>
+                                        <option value="High">High</option>
+                                        <option value="Critical">Critical</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- CHECKLIST AREA -->
+                            <div id="checklistArea" style="margin-top:20px">
+                                <h3 style="margin-bottom:15px">📋 Select a standard to load checklist...</h3>
+                            </div>
+
+                            <div class="form-group mt-20">
+                                <label>Auditor Observations / Notes</label>
+                                <textarea id="inspNotes" placeholder="Enter your observations, findings, and recommendations..." rows="4"></textarea>
+                            </div>
+
+                            <div class="grid-2">
+                                <div class="form-group">
+                                    <label>Overall Score (%)</label>
+                                    <input type="number" id="inspScore" placeholder="0-100" min="0" max="100">
+                                </div>
+                                <div class="form-group">
+                                    <label>Result</label>
+                                    <select id="inspResult">
+                                        <option value="Pass">Pass ✅</option>
+                                        <option value="Conditional Pass">Conditional Pass ⚠️</option>
+                                        <option value="Fail">Fail ❌</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div style="display:flex;gap:10px;margin-top:20px">
+                                <button class="btn btn-success" onclick="saveInspection()">💾 Save Inspection</button>
+                                <button class="btn btn-info" onclick="saveInspection();showToast('Report generated!','success')">📄 Save & Generate Report</button>
+                                <button class="btn btn-secondary" onclick="showPage('inspections')">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== CHECKLISTS ==================== -->
+                <div class="page-section" id="page-checklists">
+                    <div class="tabs">
+                        <div class="tab active" onclick="switchTab('cl','iso9001')">ISO 9001</div>
+                        <div class="tab" onclick="switchTab('cl','haccp')">HACCP</div>
+                        <div class="tab" onclick="switchTab('cl','iso14001')">ISO 14001</div>
+                        <div class="tab" onclick="switchTab('cl','foodsafety')">Food Safety</div>
+                        <div class="tab" onclick="switchTab('cl','firesafety')">Fire Safety</div>
+                    </div>
+
+                    <!-- ISO 9001 -->
+                    <div class="tab-content active" id="cl-iso9001">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>ISO 9001:2015 Quality Management System Checklist</h3>
+                                <span class="badge badge-primary">42 Check Points</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="checklist-section">
+                                    <h4>4.0 Context of the Organization</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>4.1 Understanding the organization and its context</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>4.2 Understanding the needs and expectations of interested parties</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>4.3 Determining the scope of the QMS</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>4.4 QMS and its processes documented and maintained</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>5.0 Leadership</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>5.1 Leadership and commitment demonstrated</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>5.2 Quality policy established and communicated</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>5.3 Organizational roles, responsibilities assigned</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>6.0 Planning</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>6.1 Actions to address risks and opportunities</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>6.2 Quality objectives established and planned</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>6.3 Planning of changes managed</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>7.0 Support</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>7.1 Resources determined and provided</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>7.2 Competence of personnel ensured</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>7.3 Awareness of quality policy</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>7.4 Internal & external communication managed</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>7.5 Documented information controlled</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>8.0 Operation</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>8.1 Operational planning and control</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>8.2 Requirements for products/services determined</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>8.3 Design and development of products/services</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>8.4 Control of externally provided processes</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>8.5 Production and service provision controlled</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>8.6 Release of products and services</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>8.7 Control of nonconforming outputs</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>9.0 Performance Evaluation</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>9.1 Monitoring, measurement, analysis evaluated</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>9.2 Internal audits conducted at planned intervals</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>9.3 Management review conducted</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>10.0 Improvement</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>10.1 Opportunities for improvement determined</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>10.2 Nonconformity and corrective action taken</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>10.3 Continual improvement of QMS</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HACCP -->
+                    <div class="tab-content" id="cl-haccp">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>HACCP - Hazard Analysis Critical Control Points Checklist</h3>
+                                <span class="badge badge-danger">35 Check Points</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="checklist-section">
+                                    <h4>Preliminary Steps</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>HACCP team assembled with relevant expertise</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Product description documented</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Intended use and consumers identified</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Flow diagram constructed and verified</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>Principle 1: Hazard Analysis</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>Biological hazards identified and assessed</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Chemical hazards identified and assessed</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Physical hazards identified and assessed</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Preventive measures determined for each hazard</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>Principle 2: Critical Control Points (CCPs)</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>CCPs identified using decision tree</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>CCPs documented in HACCP plan</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>Principle 3: Critical Limits</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>Critical limits established for each CCP</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Scientific basis for critical limits documented</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>Principle 4: Monitoring Procedures</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>Monitoring procedures for each CCP established</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Monitoring frequency adequate</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Monitoring records maintained</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>Principle 5: Corrective Actions</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>Corrective actions defined for each CCP deviation</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Disposition of affected product documented</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>Principle 6: Verification</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>Verification activities scheduled and conducted</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>HACCP plan validated</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>Principle 7: Record Keeping</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>All HACCP records properly maintained</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Records accessible and retrievable</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>Hygiene & Sanitation</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>Personal hygiene standards maintained</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Cleaning and sanitation schedule followed</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Pest control program implemented</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Water supply quality verified</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Temperature controls maintained and recorded</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Cross-contamination prevention measures in place</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ISO 14001 -->
+                    <div class="tab-content" id="cl-iso14001">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>ISO 14001:2015 Environmental Management System Checklist</h3>
+                                <span class="badge badge-success">30 Check Points</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="checklist-section">
+                                    <h4>4.0 Context of the Organization</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>4.1 Environmental issues (internal/external) identified</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>4.2 Interested parties and their requirements identified</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>4.3 Scope of EMS defined</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>5.0 Leadership</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>5.1 Top management commitment to EMS</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>5.2 Environmental policy established</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>6.0 Planning</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>6.1 Environmental aspects and impacts identified</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>6.1 Compliance obligations identified</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>6.2 Environmental objectives set and planned</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>Environmental Controls</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>Waste management procedures in place</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Air emissions monitored and controlled</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Water discharge quality monitored</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Energy consumption tracked and reduced</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Chemical storage and handling compliant</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Emergency preparedness for environmental incidents</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Noise pollution within regulatory limits</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FOOD SAFETY -->
+                    <div class="tab-content" id="cl-foodsafety">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Food Factory Safety Compliance Checklist</h3>
+                                <span class="badge badge-warning">28 Check Points</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="checklist-section">
+                                    <h4>Facility & Infrastructure</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>Building structure in good condition</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Floors, walls, ceilings - cleanable and intact</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Adequate lighting in all areas</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Ventilation adequate and filters clean</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Hand washing stations adequate and supplied</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>Raw Materials & Storage</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>Incoming materials inspected and documented</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Storage temperatures monitored</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>FIFO/FEFO system implemented</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Allergen management procedures in place</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>Personnel & Hygiene</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>Workers wearing appropriate PPE</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Health screening records maintained</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Food safety training provided and documented</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>Traceability & Recall</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>Product traceability system in place</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Recall procedure documented and tested</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Batch/lot coding system effective</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FIRE SAFETY -->
+                    <div class="tab-content" id="cl-firesafety">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>Fire Safety Inspection Checklist</h3>
+                                <span class="badge badge-danger">22 Check Points</span>
+                            </div>
+                            <div class="card-body">
+                                <div class="checklist-section">
+                                    <h4>Fire Prevention</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>Fire risk assessment conducted and updated</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Electrical installations inspected</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Flammable materials stored properly</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>No smoking policy enforced</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>Fire Detection & Alarm</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>Fire alarm system operational and tested</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Smoke detectors installed and working</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Manual call points accessible</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>Fire Fighting Equipment</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>Fire extinguishers adequate and serviced</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Fire hydrants/hose reels operational</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Sprinkler system functional (if applicable)</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                                <div class="checklist-section">
+                                    <h4>Evacuation</h4>
+                                    <div class="checklist-item"><input type="checkbox"><label>Emergency exits clearly marked and unobstructed</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Evacuation plan posted and communicated</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Fire drills conducted regularly</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Assembly points designated</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                    <div class="checklist-item"><input type="checkbox"><label>Emergency lighting operational</label><select><option>Compliant</option><option>Non-Compliant</option><option>Observation</option><option>N/A</option></select></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== CUSTOMERS ==================== -->
+                <div class="page-section" id="page-customers">
+                    <div class="toolbar">
+                        <div class="search-box">
+                            <input type="text" placeholder="Search customers..." id="customerSearch" oninput="filterCustomers()">
+                        </div>
+                        <button class="btn btn-sm btn-primary" onclick="openModal('customerModal')">➕ Add Customer</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Company Name</th>
+                                            <th>Domain</th>
+                                            <th>Contact</th>
+                                            <th>Location</th>
+                                            <th>Inspections</th>
+                                            <th>Last Score</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="customersTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== PAYMENTS ==================== -->
+                <div class="page-section" id="page-payments">
+                    <div class="stats-grid">
+                        <div class="stat-card green">
+                            <div class="stat-icon">💰</div>
+                            <div class="stat-value">$48,750</div>
+                            <div class="stat-label">Total Revenue</div>
+                        </div>
+                        <div class="stat-card blue">
+                            <div class="stat-icon">✅</div>
+                            <div class="stat-value">$38,200</div>
+                            <div class="stat-label">Received</div>
+                        </div>
+                        <div class="stat-card orange">
+                            <div class="stat-icon">⏳</div>
+                            <div class="stat-value">$7,550</div>
+                            <div class="stat-label">Pending</div>
+                        </div>
+                        <div class="stat-card red">
+                            <div class="stat-icon">⚠️</div>
+                            <div class="stat-value">$3,000</div>
+                            <div class="stat-label">Overdue</div>
+                        </div>
+                    </div>
+
+                    <div class="toolbar">
+                        <div class="search-box">
+                            <input type="text" placeholder="Search payments...">
+                        </div>
+                        <button class="btn btn-sm btn-primary" onclick="openModal('paymentModal')">➕ Record Payment</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>💳 Payment Records</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Invoice #</th>
+                                            <th>Customer</th>
+                                            <th>Inspection</th>
+                                            <th>Amount</th>
+                                            <th>Date</th>
+                                            <th>Method</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="paymentsTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== TREND ANALYSIS ==================== -->
+                <div class="page-section" id="page-trends">
+                    <div class="grid-2 mb-20">
+                        <div class="form-group">
+                            <label>Select Customer</label>
+                            <select id="trendCustomer" onchange="updateTrends()">
+                                <option value="all">All Customers</option>
+                                <option value="Alpha Foods Ltd">Alpha Foods Ltd</option>
+                                <option value="Beta Manufacturing">Beta Manufacturing</option>
+                                <option value="Delta Foods">Delta Foods</option>
+                                <option value="Sunrise Dairy">Sunrise Dairy</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Inspection Type</label>
+                            <select id="trendType" onchange="updateTrends()">
+                                <option value="all">All Types</option>
+                                <option value="ISO 9001">ISO 9001</option>
+                                <option value="HACCP">HACCP</option>
+                                <option value="ISO 14001">ISO 14001</option>
+                                <option value="Food Safety">Food Safety</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>📈 Score Trend Over Time</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="bar-chart" id="trendChart">
+                                    <div class="bar-group"><div class="bar-value">72%</div><div class="bar" style="height:144px;background:#ef5350"></div><div class="bar-label">Q1 2024</div></div>
+                                    <div class="bar-group"><div class="bar-value">78%</div><div class="bar" style="height:156px;background:#ff9800"></div><div class="bar-label">Q2 2024</div></div>
+                                    <div class="bar-group"><div class="bar-value">83%</div><div class="bar" style="height:166px;background:#4caf50"></div><div class="bar-label">Q3 2024</div></div>
+                                    <div class="bar-group"><div class="bar-value">87%</div><div class="bar" style="height:174px;background:#4caf50"></div><div class="bar-label">Q4 2024</div></div>
+                                    <div class="bar-group"><div class="bar-value">91%</div><div class="bar" style="height:182px;background:#2e7d32"></div><div class="bar-label">Q1 2025</div></div>
+                                    <div class="bar-group"><div class="bar-value">94%</div><div class="bar" style="height:188px;background:#2e7d32"></div><div class="bar-label">Q2 2025</div></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h3>📊 Compliance by Standard</h3>
+                            </div>
+                            <div class="card-body">
+                                <div style="padding:10px">
+                                    <div class="mb-10">
+                                        <div class="flex-between"><span>ISO 9001 QMS</span><span class="trend-up">92%</span></div>
+                                        <div class="progress-bar"><div class="progress-fill green" style="width:92%"></div></div>
+                                    </div>
+                                    <div class="mb-10">
+                                        <div class="flex-between"><span>HACCP</span><span class="trend-up">88%</span></div>
+                                        <div class="progress-bar"><div class="progress-fill green" style="width:88%"></div></div>
+                                    </div>
+                                    <div class="mb-10">
+                                        <div class="flex-between"><span>ISO 14001 EMS</span><span class="trend-up">85%</span></div>
+                                        <div class="progress-bar"><div class="progress-fill green" style="width:85%"></div></div>
+                                    </div>
+                                    <div class="mb-10">
+                                        <div class="flex-between"><span>Food Safety</span><span class="trend-down">76%</span></div>
+                                        <div class="progress-bar"><div class="progress-fill yellow" style="width:76%"></div></div>
+                                    </div>
+                                    <div class="mb-10">
+                                        <div class="flex-between"><span>Fire Safety</span><span class="trend-down">68%</span></div>
+                                        <div class="progress-bar"><div class="progress-fill red" style="width:68%"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-3 mt-20">
+                        <div class="card">
+                            <div class="card-header"><h3>🏆 Top Performers</h3></div>
+                            <div class="card-body">
+                                <div class="mb-10 flex-between" style="padding:8px;background:var(--light);border-radius:8px">
+                                    <span>🥇 Alpha Foods Ltd</span><span class="badge badge-success">96%</span>
+                                </div>
+                                <div class="mb-10 flex-between" style="padding:8px;background:var(--light);border-radius:8px">
+                                    <span>🥈 Green Valley Farms</span><span class="badge badge-success">93%</span>
+                                </div>
+                                <div class="mb-10 flex-between" style="padding:8px;background:var(--light);border-radius:8px">
+                                    <span>🥉 Epsilon Corp</span><span class="badge badge-success">91%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><h3>⚠️ Needs Improvement</h3></div>
+                            <div class="card-body">
+                                <div class="mb-10 flex-between" style="padding:8px;background:rgba(198,40,40,0.05);border-radius:8px">
+                                    <span>Delta Foods</span><span class="badge badge-danger">62%</span>
+                                </div>
+                                <div class="mb-10 flex-between" style="padding:8px;background:rgba(249,168,37,0.05);border-radius:8px">
+                                    <span>Beta Manufacturing</span><span class="badge badge-warning">71%</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><h3>📋 Common NCRs</h3></div>
+                            <div class="card-body">
+                                <div class="mb-10" style="padding:8px;background:var(--light);border-radius:8px;font-size:13px">
+                                    <strong>1.</strong> Document control failures (23%)
+                                </div>
+                                <div class="mb-10" style="padding:8px;background:var(--light);border-radius:8px;font-size:13px">
+                                    <strong>2.</strong> Temperature monitoring gaps (18%)
+                                </div>
+                                <div class="mb-10" style="padding:8px;background:var(--light);border-radius:8px;font-size:13px">
+                                    <strong>3.</strong> Training records incomplete (15%)
+                                </div>
+                                <div class="mb-10" style="padding:8px;background:var(--light);border-radius:8px;font-size:13px">
+                                    <strong>4.</strong> Corrective action delays (12%)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== REPORTS ==================== -->
+                <div class="page-section" id="page-reports">
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-header"><h3>📄 Generate Report</h3></div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Report Type</label>
+                                    <select id="reportType">
+                                        <option>Inspection Summary Report</option>
+                                        <option>Customer Compliance Report</option>
+                                        <option>Auditor Performance Report</option>
+                                        <option>Trend Analysis Report</option>
+                                        <option>Payment Summary Report</option>
+                                        <option>Non-Conformance Report (NCR)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Date Range</label>
+                                    <div class="grid-2">
+                                        <input type="date" id="reportFrom">
+                                        <input type="date" id="reportTo">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Customer (Optional)</label>
+                                    <select>
+                                        <option>All Customers</option>
+                                        <option>Alpha Foods Ltd</option>
+                                        <option>Beta Manufacturing</option>
+                                        <option>Delta Foods</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Format</label>
+                                    <select>
+                                        <option>PDF</option>
+                                        <option>Excel</option>
+                                        <option>HTML</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-primary" onclick="generateReport()" style="width:100%">📄 Generate Report</button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header"><h3>📁 Recent Reports</h3></div>
+                            <div class="card-body">
+                                <div class="mb-10" style="padding:12px;background:var(--light);border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+                                    <div>
+                                        <div style="font-weight:600;font-size:13px">📋 Monthly Inspection Summary - June 2025</div>
+                                        <div style="font-size:12px;color:var(--gray)">Generated: Jul 1, 2025</div>
+                                    </div>
+                                    <button class="btn btn-sm btn-info">📥 Download</button>
+                                </div>
+                                <div class="mb-10" style="padding:12px;background:var(--light);border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+                                    <div>
+                                        <div style="font-weight:600;font-size:13px">📊 Q2 2025 Compliance Analysis</div>
+                                        <div style="font-size:12px;color:var(--gray)">Generated: Jun 30, 2025</div>
+                                    </div>
+                                    <button class="btn btn-sm btn-info">📥 Download</button>
+                                </div>
+                                <div class="mb-10" style="padding:12px;background:var(--light);border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+                                    <div>
+                                        <div style="font-weight:600;font-size:13px">💳 Payment Summary - May 2025</div>
+                                        <div style="font-size:12px;color:var(--gray)">Generated: Jun 1, 2025</div>
+                                    </div>
+                                    <button class="btn btn-sm btn-info">📥 Download</button>
+                                </div>
+                                <div class="mb-10" style="padding:12px;background:var(--light);border-radius:8px;display:flex;justify-content:space-between;align-items:center">
+                                    <div>
+                                        <div style="font-weight:600;font-size:13px">⚠️ NCR Report - Alpha Foods</div>
+                                        <div style="font-size:12px;color:var(--gray)">Generated: May 15, 2025</div>
+                                    </div>
+                                    <button class="btn btn-sm btn-info">📥 Download</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== GPS ATTENDANCE ==================== -->
+                <div class="page-section" id="page-attendance">
+                    <div class="grid-2 mb-20">
+                        <div class="card">
+                            <div class="card-header"><h3>📍 GPS Check-In/Out</h3></div>
+                            <div class="card-body">
+                                <div class="gps-info">
+                                    <div class="gps-icon" id="attendGpsIcon">📍</div>
+                                    <div>
+                                        <strong id="gpsStatusText">Location Not Captured</strong>
+                                        <div id="gpsCoordText" style="font-size:13px;color:var(--gray)">Click 'Check-In' to capture GPS</div>
+                                        <div id="gpsAddressText" style="font-size:12px;color:var(--info)"></div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Select Customer / Site</label>
+                                    <select id="attendSite">
+                                        <option value="">Select Site</option>
+                                        <option value="Alpha Foods Ltd - Main Factory">Alpha Foods Ltd - Main Factory</option>
+                                        <option value="Beta Manufacturing - Plant A">Beta Manufacturing - Plant A</option>
+                                        <option value="Delta Foods - Processing Unit">Delta Foods - Processing Unit</option>
+                                        <option value="Sunrise Dairy - Facility">Sunrise Dairy - Facility</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Purpose</label>
+                                    <select>
+                                        <option>Scheduled Inspection</option>
+                                        <option>Follow-up Visit</option>
+                                        <option>Surprise Audit</option>
+                                        <option>Documentation Review</option>
+                                    </select>
+                                </div>
+
+                                <div style="display:flex;gap:10px">
+                                    <button class="btn btn-success" onclick="gpsCheckIn()" style="flex:1">📍 CHECK IN</button>
+                                    <button class="btn btn-danger" onclick="gpsCheckOut()" style="flex:1" id="checkoutBtn" disabled>🏁 CHECK OUT</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header"><h3>🗺️ Location Map</h3></div>
+                            <div class="card-body">
+                                <div class="map-container" id="mapContainer">
+                                    <div style="text-align:center;color:var(--gray)">
+                                        <div style="font-size:60px">🗺️</div>
+                                        <p style="margin-top:10px">Map View - GPS Locations</p>
+                                        <p style="font-size:12px">Check-in to see your location</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>📋 Attendance Records</h3>
+                            <select class="filter-select" style="max-width:200px">
+                                <option>Today</option>
+                                <option>This Week</option>
+                                <option>This Month</option>
+                                <option>All Records</option>
+                            </select>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Auditor</th>
+                                            <th>Site</th>
+                                            <th>Check-In</th>
+                                            <th>Check-Out</th>
+                                            <th>Duration</th>
+                                            <th>GPS Coordinates</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="attendanceTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== ADMIN PANEL ==================== -->
+                <div class="page-section" id="page-adminPanel">
+                    <div class="stats-grid">
+                        <div class="stat-card blue">
+                            <div class="stat-icon">👥</div>
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">Total Users</div>
+                        </div>
+                        <div class="stat-card green">
+                            <div class="stat-icon">🏢</div>
+                            <div class="stat-value">24</div>
+                            <div class="stat-label">Registered Businesses</div>
+                        </div>
+                        <div class="stat-card orange">
+                            <div class="stat-icon">📍</div>
+                            <div class="stat-value">18</div>
+                            <div class="stat-label">Active Locations</div>
+                        </div>
+                        <div class="stat-card red">
+                            <div class="stat-icon">📋</div>
+                            <div class="stat-value">6</div>
+                            <div class="stat-label">Active Standards</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="card">
+                            <div class="card-header"><h3>⚙️ System Settings</h3></div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label>Company Name</label>
+                                    <input type="text" value="NSB Audit & Certification Services">
+                                </div>
+                                <div class="form-group">
+                                    <label>Default Inspection Validity (days)</label>
+                                    <input type="number" value="365">
+                                </div>
+                                <div class="form-group">
+                                    <label>GPS Accuracy Threshold (meters)</label>
+                                    <input type="number" value="100">
+                                </div>
+                                <div class="form-group">
+                                    <label>Auto-reminder before inspection (days)</label>
+                                    <input type="number" value="7">
+                                </div>
+                                <div class="form-group">
+                                    <label>Currency</label>
+                                    <select>
+                                        <option>USD ($)</option>
+                                        <option>EUR (€)</option>
+                                        <option>GBP (£)</option>
+                                        <option>INR (₹)</option>
+                                        <option>PKR (Rs)</option>
+                                    </select>
+                                </div>
+                                <button class="btn btn-success">💾 Save Settings</button>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header"><h3>📊 System Activity Log</h3></div>
+                            <div class="card-body">
+                                <div class="timeline">
+                                    <div class="timeline-item">
+                                        <div class="time">Today, 10:45 AM</div>
+                                        <div class="content">👤 <strong>Admin</strong> updated location for Alpha Foods</div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="time">Today, 9:30 AM</div>
+                                        <div class="content">📋 <strong>John Smith</strong> completed ISO 9001 inspection</div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="time">Yesterday, 5:00 PM</div>
+                                        <div class="content">💳 Payment of $2,500 recorded for Gamma Industries</div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="time">Yesterday, 2:15 PM</div>
+                                        <div class="content">👤 New auditor <strong>Emily Wilson</strong> registered</div>
+                                    </div>
+                                    <div class="timeline-item">
+                                        <div class="time">2 days ago</div>
+                                        <div class="content">🏢 New customer <strong>Sunrise Dairy</strong> added</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== LOCATION MANAGEMENT ==================== -->
+                <div class="page-section" id="page-locations">
+                    <div class="toolbar">
+                        <div class="search-box">
+                            <input type="text" placeholder="Search locations...">
+                        </div>
+                        <button class="btn btn-sm btn-primary" onclick="openModal('locationModal')">➕ Add Location</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3>🗺️ Assigned Locations for Businesses</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Customer / Business</th>
+                                            <th>Site Name</th>
+                                            <th>Address</th>
+                                            <th>GPS Coordinates</th>
+                                            <th>Radius (m)</th>
+                                            <th>Assigned Auditor</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="locationsTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-20">
+                        <div class="card-header"><h3>🗺️ All Locations Map View</h3></div>
+                        <div class="card-body">
+                            <div class="map-container" style="height:400px;position:relative">
+                                <div style="font-size:20px" class="map-pin" style="top:30%;left:20%">📍</div>
+                                <div style="font-size:20px" class="map-pin" style="top:50%;left:45%">📍</div>
+                                <div style="font-size:20px" class="map-pin" style="top:25%;left:70%">📍</div>
+                                <div style="font-size:20px" class="map-pin" style="top:60%;left:30%">📍</div>
+                                <div style="font-size:20px" class="map-pin" style="top:40%;left:60%">📍</div>
+                                <div style="text-align:center;padding-top:140px">
+                                    <div style="font-size:48px">🗺️</div>
+                                    <p>Interactive Map - All Business Locations</p>
+                                    <p style="font-size:12px;color:var(--gray)">5 active locations pinned</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ==================== USER MANAGEMENT ==================== -->
+                <div class="page-section" id="page-users">
+                    <div class="toolbar">
+                        <div class="search-box">
+                            <input type="text" placeholder="Search users...">
+                        </div>
+                        <button class="btn btn-sm btn-primary" onclick="openModal('userModal')">➕ Add User</button>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header"><h3>👥 Users & Roles</h3></div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Role</th>
+                                            <th>Phone</th>
+                                            <th>Last Login</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="usersTableBody">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- Customer Modal -->
+    <div class="modal-overlay" id="customerModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>🏢 Add New Customer</h3>
+                <button class="modal-close" onclick="closeModal('customerModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Company Name *</label>
+                        <input type="text" id="custName" placeholder="Enter company name">
+                    </div>
+                    <div class="form-group">
+                        <label>Domain / Sector *</label>
+                        <select id="custDomain">
+                            <option value="Food Factory">Food Factory</option>
+                            <option value="Manufacturing">Manufacturing</option>
+                            <option value="Dairy">Dairy</option>
+                            <option value="Agriculture">Agriculture</option>
+                            <option value="Pharmaceutical">Pharmaceutical</option>
+                            <option value="Chemical">Chemical</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Person *</label>
+                        <input type="text" id="custContact" placeholder="Contact person name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="custEmail" placeholder="Email address">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="custPhone" placeholder="Phone number">
+                    </div>
+                    <div class="form-group">
+                        <label>Location / City</label>
+                        <input type="text" id="custLocation" placeholder="City, State">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Full Address</label>
+                    <textarea id="custAddress" placeholder="Full address of the business"></textarea>
+                </div>
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>GPS Latitude</label>
+                        <input type="text" id="custLat" placeholder="e.g., 24.8607">
+                    </div>
+                    <div class="form-group">
+                        <label>GPS Longitude</label>
+                        <input type="text" id="custLng" placeholder="e.g., 67.0011">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('customerModal')">Cancel</button>
+                <button class="btn btn-success" onclick="saveCustomer()">💾 Save Customer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal-overlay" id="paymentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>💳 Record Payment</h3>
+                <button class="modal-close" onclick="closeModal('paymentModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Customer *</label>
+                        <select id="payCustomer">
+                            <option value="">Select Customer</option>
+                            <option>Alpha Foods Ltd</option>
+                            <option>Beta Manufacturing</option>
+                            <option>Gamma Industries</option>
+                            <option>Delta Foods</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Inspection Reference</label>
+                        <select>
+                            <option>INS-045 - ISO 9001</option>
+                            <option>INS-042 - HACCP</option>
+                            <option>INS-040 - ISO 14001</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Amount *</label>
+                        <input type="number" id="payAmount" placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Date *</label>
+                        <input type="date" id="payDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Payment Method</label>
+                        <select id="payMethod">
+                            <option>Bank Transfer</option>
+                            <option>Credit Card</option>
+                            <option>Cash</option>
+                            <option>Check</option>
+                            <option>Online</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="payStatus">
+                            <option value="Paid">Paid</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Overdue">Overdue</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Notes</label>
+                    <textarea placeholder="Payment notes..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('paymentModal')">Cancel</button>
+                <button class="btn btn-success" onclick="savePayment()">💾 Save Payment</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Location Modal -->
+    <div class="modal-overlay" id="locationModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>📍 Add Location</h3>
+                <button class="modal-close" onclick="closeModal('locationModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Customer / Business *</label>
+                        <select id="locCustomer">
+                            <option value="">Select Customer</option>
+                            <option>Alpha Foods Ltd</option>
+                            <option>Beta Manufacturing</option>
+                            <option>Gamma Industries</option>
+                            <option>Delta Foods</option>
+                            <option>Sunrise Dairy</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Site Name *</label>
+                        <input type="text" id="locSiteName" placeholder="e.g., Main Factory">
+                    </div>
+                    <div class="form-group">
+                        <label>GPS Latitude *</label>
+                        <input type="text" id="locLat" placeholder="e.g., 24.8607">
+                    </div>
+                    <div class="form-group">
+                        <label>GPS Longitude *</label>
+                        <input type="text" id="locLng" placeholder="e.g., 67.0011">
+                    </div>
+                    <div class="form-group">
+                        <label>Allowed Radius (meters) *</label>
+                        <input type="number" id="locRadius" value="200">
+                    </div>
+                    <div class="form-group">
+                        <label>Assigned Auditor</label>
+                        <select id="locAuditor">
+                            <option>John Smith</option>
+                            <option>Sarah Johnson</option>
+                            <option>Mike Davis</option>
+                            <option>Emily Wilson</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Full Address</label>
+                    <textarea id="locAddress" placeholder="Full address..."></textarea>
+                </div>
+                <button class="btn btn-sm btn-info mb-10" onclick="captureGPS('location')">📍 Use My Current Location</button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('locationModal')">Cancel</button>
+                <button class="btn btn-success" onclick="saveLocation()">💾 Save Location</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- User Modal -->
+    <div class="modal-overlay" id="userModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>👤 Add New User</h3>
+                <button class="modal-close" onclick="closeModal('userModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="grid-2">
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="userName" placeholder="Full name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email *</label>
+                        <input type="email" id="userEmail" placeholder="Email address">
+                    </div>
+                    <div class="form-group">
+                        <label>Role *</label>
+                        <select id="userRoleSelect">
+                            <option value="admin">Admin</option>
+                            <option value="auditor">Auditor</option>
+                            <option value="customer">Customer</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" id="userPhone" placeholder="Phone number">
+                    </div>
+                    <div class="form-group">
+                        <label>Password *</label>
+                        <input type="password" id="userPassword" placeholder="Set password">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select>
+                            <option>Active</option>
+                            <option>Inactive</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('userModal')">Cancel</button>
+                <button class="btn btn-success" onclick="saveUser()">💾 Save User</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inspection Detail Modal -->
+    <div class="modal-overlay" id="inspectionDetailModal">
+        <div class="modal" style="max-width:800px">
+            <div class="modal-header">
+                <h3>📋 Inspection Details</h3>
+                <button class="modal-close" onclick="closeModal('inspectionDetailModal')">✕</button>
+            </div>
+            <div class="modal-body" id="inspectionDetailBody">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-info" onclick="window.print()">🖨️ Print Report</button>
+                <button class="btn btn-secondary" onclick="closeModal('inspectionDetailModal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ================================
+        // DATA STORE
+        // ================================
+        let currentUser = { name: 'Admin', role: 'admin', email: 'admin@nsb.com' };
+        let currentRole = 'admin';
+
+        const DB = {
+            inspections: [
+                { id: 'INS-001', customer: 'Alpha Foods Ltd', type: 'ISO 9001', domain: 'Food Factory', date: '2025-01-15', auditor: 'John Smith', score: 92, result: 'Pass', status: 'Completed', gps: '24.8607, 67.0011', notes: 'Excellent documentation. Minor observation on corrective action timelines.' },
+                { id: 'INS-002', customer: 'Alpha Foods Ltd', type: 'HACCP', domain: 'Food Factory', date: '2025-02-20', auditor: 'Sarah Johnson', score: 88, result: 'Pass', status: 'Completed', gps: '24.8607, 67.0011', notes: 'CCP monitoring effective. Temperature records well maintained.' },
+                { id: 'INS-003', customer: 'Beta Manufacturing', type: 'ISO 9001', domain: 'Manufacturing', date: '2025-01-25', auditor: 'Mike Davis', score: 71, result: 'Conditional Pass', status: 'Completed', gps: '25.3960, 68.3578', notes: 'Document control needs improvement. Training records incomplete.' },
+                { id: 'INS-004', customer: 'Beta Manufacturing', type: 'ISO 14001', domain: 'Manufacturing', date: '2025-03-10', auditor: 'John Smith', score: 78, result: 'Conditional Pass', status: 'Completed', gps: '25.3960, 68.3578', notes: 'Waste management improved. Air emission monitoring needs attention.' },
+                { id: 'INS-005', customer: 'Gamma Industries', type: 'ISO 9001', domain: 'Manufacturing', date: '2025-02-15', auditor: 'Emily Wilson', score: 95, result: 'Pass', status: 'Completed', gps: '31.5204, 74.3587', notes: 'Outstanding quality management system. Best practices observed.' },
+                { id: 'INS-006', customer: 'Delta Foods', type: 'HACCP', domain: 'Food Factory', date: '2025-03-05', auditor: 'Sarah Johnson', score: 62, result: 'Fail', status: 'Completed', gps: '33.6844, 73.0479', notes: 'Critical failures: Cross-contamination risks, temperature abuse noted.' },
+                { id: 'INS-007', customer: 'Delta Foods', type: 'Food Safety', domain: 'Food Factory', date: '2025-04-15', auditor: 'John Smith', score: 58, result: 'Fail', status: 'Completed', gps: '33.6844, 73.0479', notes: 'Pest control inadequate. Personnel hygiene needs major improvement.' },
+                { id: 'INS-008', customer: 'Epsilon Corp', type: 'ISO 14001', domain: 'Chemical', date: '2025-04-20', auditor: 'Mike Davis', score: 91, result: 'Pass', status: 'Completed', gps: '30.1575, 71.5249', notes: 'Environmental controls excellent. Waste disposal well managed.' },
+                { id: 'INS-009', customer: 'Alpha Foods Ltd', type: 'ISO 9001', domain: 'Food Factory', date: '2025-05-10', auditor: 'John Smith', score: 96, result: 'Pass', status: 'Completed', gps: '24.8607, 67.0011', notes: 'Significant improvement from previous audit. All NCRs closed.' },
+                { id: 'INS-010', customer: 'Sunrise Dairy', type: 'HACCP', domain: 'Dairy', date: '2025-05-25', auditor: 'Sarah Johnson', score: 84, result: 'Pass', status: 'Completed', gps: '31.4504, 73.1350', notes: 'Good HACCP implementation. Minor gaps in verification records.' },
+                { id: 'INS-011', customer: 'Green Valley Farms', type: 'ISO 14001', domain: 'Agriculture', date: '2025-06-10', auditor: 'Emily Wilson', score: 93, result: 'Pass', status: 'Completed', gps: '34.0151, 71.5249', notes: 'Excellent environmental management. Sustainable practices implemented.' },
+                { id: 'INS-012', customer: 'Omega Foods Pvt Ltd', type: 'ISO 9001', domain: 'Food Factory', date: '2025-07-20', auditor: 'John Smith', score: null, result: null, status: 'Scheduled', gps: '', notes: '' },
+                { id: 'INS-013', customer: 'Sunrise Dairy', type: 'HACCP', domain: 'Dairy', date: '2025-07-22', auditor: 'Sarah Johnson', score: null, result: null, status: 'Scheduled', gps: '', notes: '' },
+                { id: 'INS-014', customer: 'Green Valley Farms', type: 'ISO 14001', domain: 'Agriculture', date: '2025-07-25', auditor: 'Mike Davis', score: null, result: null, status: 'In Progress', gps: '34.0151, 71.5249', notes: '' },
+            ],
+
+            customers: [
+                { id: 'CUS-001', name: 'Alpha Foods Ltd', domain: 'Food Factory', contact: 'Ahmed Khan', email: 'ahmed@alphafoods.com', phone: '+92-300-1234567', location: 'Karachi', lat: '24.8607', lng: '67.0011', status: 'Active', inspections: 3, lastScore: 96 },
+                { id: 'CUS-002', name: 'Beta Manufacturing', domain: 'Manufacturing', contact: 'Sara Ali', email: 'sara@betamfg.com', phone: '+92-321-7654321', location: 'Hyderabad', lat: '25.3960', lng: '68.3578', status: 'Active', inspections: 2, lastScore: 78 },
+                { id: 'CUS-003', name: 'Gamma Industries', domain: 'Manufacturing', contact: 'Hassan Raza', email: 'hassan@gamma.com', phone: '+92-333-4567890', location: 'Lahore', lat: '31.5204', lng: '74.3587', status: 'Active', inspections: 1, lastScore: 95 },
+                { id: 'CUS-004', name: 'Delta Foods', domain: 'Food Factory', contact: 'Fatima Noor', email: 'fatima@deltafoods.com', phone: '+92-345-9876543', location: 'Islamabad', lat: '33.6844', lng: '73.0479', status: 'At Risk', inspections: 2, lastScore: 58 },
+                { id: 'CUS-005', name: 'Epsilon Corp', domain: 'Chemical', contact: 'Usman Malik', email: 'usman@epsilon.com', phone: '+92-312-3456789', location: 'Multan', lat: '30.1575', lng: '71.5249', status: 'Active', inspections: 1, lastScore: 91 },
+                { id: 'CUS-006', name: 'Omega Foods Pvt Ltd', domain: 'Food Factory', contact: 'Zain Abbas', email: 'zain@omegafoods.com', phone: '+92-301-6543210', location: 'Karachi', lat: '24.8700', lng: '67.0300', status: 'Active', inspections: 0, lastScore: null },
+                { id: 'CUS-007', name: 'Sunrise Dairy', domain: 'Dairy', contact: 'Ayesha Iqbal', email: 'ayesha@sunrise.com', phone: '+92-322-4567890', location: 'Faisalabad', lat: '31.4504', lng: '73.1350', status: 'Active', inspections: 1, lastScore: 84 },
+                { id: 'CUS-008', name: 'Green Valley Farms', domain: 'Agriculture', contact: 'Bilal Ahmad', email: 'bilal@gvfarms.com', phone: '+92-340-7890123', location: 'Peshawar', lat: '34.0151', lng: '71.5249', status: 'Active', inspections: 1, lastScore: 93 },
+            ],
+
+            payments: [
+                { id: 'INV-001', customer: 'Alpha Foods Ltd', inspection: 'INS-001 ISO 9001', amount: 2500, date: '2025-01-20', method: 'Bank Transfer', status: 'Paid' },
+                { id: 'INV-002', customer: 'Alpha Foods Ltd', inspection: 'INS-002 HACCP', amount: 3000, date: '2025-02-25', method: 'Bank Transfer', status: 'Paid' },
+                { id: 'INV-003', customer: 'Beta Manufacturing', inspection: 'INS-003 ISO 9001', amount: 2500, date: '2025-02-01', method: 'Credit Card', status: 'Paid' },
+                { id: 'INV-004', customer: 'Beta Manufacturing', inspection: 'INS-004 ISO 14001', amount: 3500, date: '2025-03-15', method: 'Bank Transfer', status: 'Pending' },
+                { id: 'INV-005', customer: 'Gamma Industries', inspection: 'INS-005 ISO 9001', amount: 2500, date: '2025-02-20', method: 'Online', status: 'Paid' },
+                { id: 'INV-006', customer: 'Delta Foods', inspection: 'INS-006 HACCP', amount: 3000, date: '2025-03-10', method: 'Check', status: 'Overdue' },
+                { id: 'INV-007', customer: 'Epsilon Corp', inspection: 'INS-008 ISO 14001', amount: 3500, date: '2025-04-25', method: 'Bank Transfer', status: 'Paid' },
+                { id: 'INV-008', customer: 'Sunrise Dairy', inspection: 'INS-010 HACCP', amount: 3000, date: '2025-06-01', method: 'Online', status: 'Pending' },
+                { id: 'INV-009', customer: 'Green Valley Farms', inspection: 'INS-011 ISO 14001', amount: 3500, date: '2025-06-15', method: 'Bank Transfer', status: 'Paid' },
+            ],
+
+            locations: [
+                { customer: 'Alpha Foods Ltd', site: 'Main Factory', address: 'SITE Area, Karachi', lat: '24.8607', lng: '67.0011', radius: 200, auditor: 'John Smith', status: 'Active' },
+                { customer: 'Beta Manufacturing', site: 'Plant A', address: 'Industrial Zone, Hyderabad', lat: '25.3960', lng: '68.3578', radius: 300, auditor: 'Mike Davis', status: 'Active' },
+                { customer: 'Gamma Industries', site: 'Head Office', address: 'Gulberg III, Lahore', lat: '31.5204', lng: '74.3587', radius: 150, auditor: 'Emily Wilson', status: 'Active' },
+                { customer: 'Delta Foods', site: 'Processing Unit', address: 'I-9 Industrial, Islamabad', lat: '33.6844', lng: '73.0479', radius: 250, auditor: 'Sarah Johnson', status: 'Active' },
+                { customer: 'Sunrise Dairy', site: 'Dairy Facility', address: 'Millat Road, Faisalabad', lat: '31.4504', lng: '73.1350', radius: 200, auditor: 'Sarah Johnson', status: 'Active' },
+            ],
+
+            users: [
+                { id: 'USR-001', name: 'Admin User', email: 'admin@nsb.com', role: 'Admin', phone: '+92-300-0000001', lastLogin: '2025-07-15 10:30', status: 'Active' },
+                { id: 'USR-002', name: 'John Smith', email: 'john@nsb.com', role: 'Auditor', phone: '+92-300-0000002', lastLogin: '2025-07-15 09:00', status: 'Active' },
+                { id: 'USR-003', name: 'Sarah Johnson', email: 'sarah@nsb.com', role: 'Auditor', phone: '+92-300-0000003', lastLogin: '2025-07-14 16:00', status: 'Active' },
+                { id: 'USR-004', name: 'Mike Davis', email: 'mike@nsb.com', role: 'Auditor', phone: '+92-300-0000004', lastLogin: '2025-07-14 14:30', status: 'Active' },
+                { id: 'USR-005', name: 'Emily Wilson', email: 'emily@nsb.com', role: 'Auditor', phone: '+92-300-0000005', lastLogin: '2025-07-13 11:00', status: 'Active' },
+                { id: 'USR-006', name: 'Ahmed Khan', email: 'ahmed@alphafoods.com', role: 'Customer', phone: '+92-300-1234567', lastLogin: '2025-07-12 15:00', status: 'Active' },
+            ],
+
+            attendance: [
+                { date: '2025-07-15', auditor: 'John Smith', site: 'Alpha Foods Ltd - Main Factory', checkIn: '09:15 AM', checkOut: '04:30 PM', duration: '7h 15m', gps: '24.8610, 67.0015', status: 'Completed' },
+                { date: '2025-07-15', auditor: 'Sarah Johnson', site: 'Delta Foods - Processing Unit', checkIn: '08:45 AM', checkOut: '03:00 PM', duration: '6h 15m', gps: '33.6850, 73.0482', status: 'Completed' },
+                { date: '2025-07-14', auditor: 'Mike Davis', site: 'Beta Manufacturing - Plant A', checkIn: '09:00 AM', checkOut: '05:00 PM', duration: '8h 00m', gps: '25.3965, 68.3580', status: 'Completed' },
+                { date: '2025-07-14', auditor: 'Emily Wilson', site: 'Gamma Industries - Head Office', checkIn: '10:00 AM', checkOut: '04:00 PM', duration: '6h 00m', gps: '31.5210, 74.3590', status: 'Completed' },
+                { date: '2025-07-13', auditor: 'John Smith', site: 'Sunrise Dairy - Facility', checkIn: '08:30 AM', checkOut: '02:30 PM', duration: '6h 00m', gps: '31.4508, 73.1355', status: 'Completed' },
+            ]
+        };
+
+        let nextInspId = 15;
+        let nextCustId = 9;
+
+        // ================================
+        // LOGIN SYSTEM
+        // ================================
+        function selectRole(role) {
+            currentRole = role;
+            document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById('role' + role.charAt(0).toUpperCase() + role.slice(1)).classList.add('active');
+        }
+
+        function handleLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!email || !password) {
+                showToast('Please enter email and password', 'error');
+                return;
+            }
+
+            const roleNames = { admin: 'Administrator', auditor: 'Auditor', customer: 'Customer' };
+            currentUser = {
+                name: currentRole === 'admin' ? 'Admin User' : currentRole === 'auditor' ? 'John Smith' : 'Ahmed Khan',
+                role: currentRole,
+                email: email
+            };
+
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('appLayout').style.display = 'block';
+
+            // Update UI
+            document.getElementById('sidebarUserName').textContent = currentUser.name;
+            document.getElementById('sidebarUserRole').textContent = roleNames[currentRole];
+            document.getElementById('topUserName').textContent = currentUser.name;
+            document.getElementById('topUserRole').textContent = roleNames[currentRole];
+            document.getElementById('topUserAvatar').textContent = currentUser.name.charAt(0);
+
+            // Show/hide admin items
+            const adminItems = document.querySelectorAll('.admin-only');
+            adminItems.forEach(item => {
+                item.style.display = currentRole === 'admin' ? '' : 'none';
+            });
+
+            // Load data
+            renderInspections();
+            renderCustomers();
+            renderPayments();
+            renderLocations();
+            renderUsers();
+            renderAttendance();
+
+            showToast(`Welcome back, ${currentUser.name}!`, 'success');
+        }
+
+        function handleLogout() {
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('appLayout').style.display = 'none';
+            showToast('Logged out successfully', 'info');
+        }
+
+        // ================================
+        // NAVIGATION
+        // ================================
+        function showPage(page) {
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            document.getElementById('page-' + page).classList.add('active');
+
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+            const menuItem = document.querySelector(`.menu-item[data-page="${page}"]`);
+            if (menuItem) menuItem.classList.add('active');
+
+            const titles = {
+                dashboard: ['Dashboard', 'Overview of audit activities'],
+                inspections: ['All Inspections', 'View and manage all inspections'],
+                newInspection: ['New Inspection', 'Create a new inspection record'],
+                checklists: ['Checklists & Standards', 'ISO, HACCP, Safety checklists'],
+                customers: ['Customer Management', 'Manage your clients and businesses'],
+                payments: ['Payments', 'Track invoices and payments'],
+                trends: ['Trend Analysis', 'Inspection score trends and analytics'],
+                reports: ['Reports', 'Generate and download reports'],
+                attendance: ['GPS Attendance', 'Location-based check-in/out'],
+                adminPanel: ['Admin Panel', 'System configuration and settings'],
+                locations: ['Location Management', 'GPS locations for businesses'],
+                users: ['User Management', 'Manage users and roles'],
+            };
+
+            if (titles[page]) {
+                document.getElementById('pageTitle').textContent = titles[page][0];
+                document.getElementById('pageSubtitle').textContent = titles[page][1];
+            }
+
+            // Close sidebar on mobile
+            document.getElementById('sidebar').classList.remove('open');
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        // ================================
+        // RENDER FUNCTIONS
+        // ================================
+        function renderInspections() {
+            const tbody = document.getElementById('inspectionsTableBody');
+            tbody.innerHTML = DB.inspections.map(i => `
+                <tr>
+                    <td><strong>${i.id}</strong></td>
+                    <td>${i.customer}</td>
+                    <td>${i.type}</td>
+                    <td><span class="badge badge-primary">${i.domain}</span></td>
+                    <td>${i.date}</td>
+                    <td>${i.auditor}</td>
+                    <td>${i.score !== null ? `<strong>${i.score}%</strong>` : '-'}</td>
+                    <td><span class="badge ${getStatusBadge(i.status)}">${i.status}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-icon view" title="View" onclick="viewInspection('${i.id}')">👁️</button>
+                            <button class="btn-icon edit" title="Edit">✏️</button>
+                            <button class="btn-icon delete" title="Delete" onclick="deleteInspection('${i.id}')">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderCustomers() {
+            const tbody = document.getElementById('customersTableBody');
+            tbody.innerHTML = DB.customers.map(c => `
+                <tr>
+                    <td><strong>${c.id}</strong></td>
+                    <td>${c.name}</td>
+                    <td><span class="badge badge-primary">${c.domain}</span></td>
+                    <td>${c.contact}<br><small style="color:var(--gray)">${c.email}</small></td>
+                    <td>📍 ${c.location}</td>
+                    <td>${c.inspections}</td>
+                    <td>${c.lastScore !== null ? `<strong class="${c.lastScore >= 80 ? 'trend-up' : c.lastScore >= 60 ? '' : 'trend-down'}">${c.lastScore}%</strong>` : '-'}</td>
+                    <td><span class="badge ${c.status === 'Active' ? 'badge-success' : 'badge-danger'}">${c.status}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-icon view" title="View">👁️</button>
+                            <button class="btn-icon edit" title="Edit">✏️</button>
+                            <button class="btn-icon delete" title="Delete">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderPayments() {
+            const tbody = document.getElementById('paymentsTableBody');
+            tbody.innerHTML = DB.payments.map(p => `
+                <tr>
+                    <td><strong>${p.id}</strong></td>
+                    <td>${p.customer}</td>
+                    <td>${p.inspection}</td>
+                    <td><strong>$${p.amount.toLocaleString()}</strong></td>
+                    <td>${p.date}</td>
+                    <td>${p.method}</td>
+                    <td><span class="badge ${p.status === 'Paid' ? 'badge-success' : p.status === 'Pending' ? 'badge-warning' : 'badge-danger'}">${p.status}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-icon view" title="View">👁️</button>
+                            <button class="btn-icon edit" title="Edit">✏️</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderLocations() {
+            const tbody = document.getElementById('locationsTableBody');
+            tbody.innerHTML = DB.locations.map(l => `
+                <tr>
+                    <td>${l.customer}</td>
+                    <td>${l.site}</td>
+                    <td>${l.address}</td>
+                    <td><code>${l.lat}, ${l.lng}</code></td>
+                    <td>${l.radius}m</td>
+                    <td>${l.auditor}</td>
+                    <td><span class="badge badge-success">${l.status}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-icon edit" title="Edit">✏️</button>
+                            <button class="btn-icon delete" title="Delete">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderUsers() {
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = DB.users.map(u => `
+                <tr>
+                    <td><strong>${u.id}</strong></td>
+                    <td>${u.name}</td>
+                    <td>${u.email}</td>
+                    <td><span class="badge ${u.role === 'Admin' ? 'badge-danger' : u.role === 'Auditor' ? 'badge-info' : 'badge-success'}">${u.role}</span></td>
+                    <td>${u.phone}</td>
+                    <td>${u.lastLogin}</td>
+                    <td><span class="badge badge-success">${u.status}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-icon edit" title="Edit">✏️</button>
+                            <button class="btn-icon delete" title="Delete">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function renderAttendance() {
+            const tbody = document.getElementById('attendanceTableBody');
+            tbody.innerHTML = DB.attendance.map(a => `
+                <tr>
+                    <td>${a.date}</td>
+                    <td>${a.auditor}</td>
+                    <td>${a.site}</td>
+                    <td><span class="badge badge-success">${a.checkIn}</span></td>
+                    <td><span class="badge badge-danger">${a.checkOut}</span></td>
+                    <td><strong>${a.duration}</strong></td>
+                    <td><code style="font-size:11px">${a.gps}</code></td>
+                    <td><span class="badge badge-success">${a.status}</span></td>
+                </tr>
+            `).join('');
+        }
+
+        // ================================
+        // HELPER FUNCTIONS
+        // ================================
+        function getStatusBadge(status) {
+            const map = { 'Completed': 'badge-success', 'In Progress': 'badge-info', 'Scheduled': 'badge-warning', 'Failed': 'badge-danger' };
+            return map[status] || 'badge-primary';
+        }
+
+        // ================================
+        // INSPECTION FUNCTIONS
+        // ================================
+        function viewInspection(id) {
+            const insp = DB.inspections.find(i => i.id === id);
+            if (!insp) return;
+
+            const scoreClass = insp.score >= 80 ? 'score-high' : insp.score >= 60 ? 'score-medium' : 'score-low';
+
+            document.getElementById('inspectionDetailBody').innerHTML = `
+                <div class="customer-detail-grid">
+                    <div class="detail-item"><label>Inspection ID</label><span>${insp.id}</span></div>
+                    <div class="detail-item"><label>Customer</label><span>${insp.customer}</span></div>
+                    <div class="detail-item"><label>Standard</label><span>${insp.type}</span></div>
+                    <div class="detail-item"><label>Domain</label><span>${insp.domain}</span></div>
+                    <div class="detail-item"><label>Date</label><span>${insp.date}</span></div>
+                    <div class="detail-item"><label>Auditor</label><span>${insp.auditor}</span></div>
+                    <div class="detail-item"><label>Status</label><span class="badge ${getStatusBadge(insp.status)}">${insp.status}</span></div>
+                    <div class="detail-item"><label>GPS Location</label><span>${insp.gps || 'N/A'}</span></div>
+                </div>
+
+                ${insp.score !== null ? `
+                <div class="score-display mt-20">
+                    <div class="score-circle ${scoreClass}">${insp.score}%</div>
+                    <div>
+                        <h3>Overall Score: ${insp.score}%</h3>
+                        <p>Result: <span class="badge ${insp.result === 'Pass' ? 'badge-success' : insp.result === 'Fail' ? 'badge-danger' : 'badge-warning'}">${insp.result}</span></p>
+                        <div class="progress-bar mt-10" style="width:200px">
+                            <div class="progress-fill ${insp.score >= 80 ? 'green' : insp.score >= 60 ? 'yellow' : 'red'}" style="width:${insp.score}%"></div>
+                        </div>
+                    </div>
+                </div>
+                ` : ''}
+
+                ${insp.notes ? `
+                <div class="card mt-20">
+                    <div class="card-header"><h3>📝 Auditor Notes & Observations</h3></div>
+                    <div class="card-body"><p>${insp.notes}</p></div>
+                </div>
+                ` : ''}
+            `;
+
+            openModal('inspectionDetailModal');
+        }
+
+        function deleteInspection(id) {
+            if (confirm('Are you sure you want to delete this inspection?')) {
+                DB.inspections = DB.inspections.filter(i => i.id !== id);
+                renderInspections();
+                showToast('Inspection deleted successfully', 'warning');
+            }
+        }
+
+        function saveInspection() {
+            const customer = document.getElementById('inspCustomer').value;
+            const type = document.getElementById('inspType').value;
+            const date = document.getElementById('inspDate').value;
+            const auditor = document.getElementById('inspAuditor').value;
+            const domain = document.getElementById('inspDomain').value;
+            const score = document.getElementById('inspScore').value;
+            const result = document.getElementById('inspResult').value;
+            const notes = document.getElementById('inspNotes').value;
+
+            if (!customer || !type || !date || !auditor) {
+                showToast('Please fill in all required fields', 'error');
+                return;
+            }
+
+            const newInsp = {
+                id: 'INS-' + String(nextInspId++).padStart(3, '0'),
+                customer, type, domain: domain || 'General', date, auditor,
+                score: score ? parseInt(score) : null,
+                result: score ? result : null,
+                status: score ? 'Completed' : 'Scheduled',
+                gps: document.getElementById('inspGpsCoords').textContent || '',
+                notes
+            };
+
+            DB.inspections.unshift(newInsp);
+            renderInspections();
+
+            // Update customer data
+            const cust = DB.customers.find(c => c.name === customer);
+            if (cust) {
+                cust.inspections++;
+                if (score) cust.lastScore = parseInt(score);
+            }
+            renderCustomers();
+
+            // Update dashboard
+            document.getElementById('totalInspections').textContent = DB.inspections.length;
+            document.getElementById('completedInspections').textContent = DB.inspections.filter(i => i.status === 'Completed').length;
+
+            // Clear form
+            document.getElementById('inspCustomer').value = '';
+            document.getElementById('inspType').value = '';
+            document.getElementById('inspDate').value = '';
+            document.getElementById('inspAuditor').value = '';
+            document.getElementById('inspScore').value = '';
+            document.getElementById('inspNotes').value = '';
+
+            showToast('Inspection saved successfully!', 'success');
+            showPage('inspections');
+        }
+
+        function filterInspections() {
+            const search = document.getElementById('inspectionSearch').value.toLowerCase();
+            const typeFilter = document.getElementById('inspectionTypeFilter').value;
+            const statusFilter = document.getElementById('inspectionStatusFilter').value;
+
+            const filtered = DB.inspections.filter(i => {
+                const matchSearch = !search || i.customer.toLowerCase().includes(search) || i.id.toLowerCase().includes(search) || i.auditor.toLowerCase().includes(search);
+                const matchType = !typeFilter || i.type === typeFilter;
+                const matchStatus = !statusFilter || i.status === statusFilter;
+                return matchSearch && matchType && matchStatus;
+            });
+
+            const tbody = document.getElementById('inspectionsTableBody');
+            tbody.innerHTML = filtered.map(i => `
+                <tr>
+                    <td><strong>${i.id}</strong></td>
+                    <td>${i.customer}</td>
+                    <td>${i.type}</td>
+                    <td><span class="badge badge-primary">${i.domain}</span></td>
+                    <td>${i.date}</td>
+                    <td>${i.auditor}</td>
+                    <td>${i.score !== null ? `<strong>${i.score}%</strong>` : '-'}</td>
+                    <td><span class="badge ${getStatusBadge(i.status)}">${i.status}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-icon view" onclick="viewInspection('${i.id}')">👁️</button>
+                            <button class="btn-icon edit">✏️</button>
+                            <button class="btn-icon delete" onclick="deleteInspection('${i.id}')">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function filterCustomers() {
+            const search = document.getElementById('customerSearch').value.toLowerCase();
+            const filtered = DB.customers.filter(c =>
+                c.name.toLowerCase().includes(search) || c.domain.toLowerCase().includes(search) || c.location.toLowerCase().includes(search)
+            );
+
+            const tbody = document.getElementById('customersTableBody');
+            tbody.innerHTML = filtered.map(c => `
+                <tr>
+                    <td><strong>${c.id}</strong></td>
+                    <td>${c.name}</td>
+                    <td><span class="badge badge-primary">${c.domain}</span></td>
+                    <td>${c.contact}<br><small style="color:var(--gray)">${c.email}</small></td>
+                    <td>📍 ${c.location}</td>
+                    <td>${c.inspections}</td>
+                    <td>${c.lastScore !== null ? `<strong>${c.lastScore}%</strong>` : '-'}</td>
+                    <td><span class="badge ${c.status === 'Active' ? 'badge-success' : 'badge-danger'}">${c.status}</span></td>
+                    <td>
+                        <div class="action-btns">
+                            <button class="btn-icon view">👁️</button>
+                            <button class="btn-icon edit">✏️</button>
+                            <button class="btn-icon delete">🗑️</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // ================================
+        // CHECKLIST LOADER
+        // ================================
+        function loadChecklist() {
+            const type = document.getElementById('inspType').value;
+            const area = document.getElementById('checklistArea');
+
+            const checklists = {
+                'ISO 9001': [
+                    { section: 'Context of Organization', items: ['Organization context understood', 'Interested parties identified', 'QMS scope defined', 'QMS processes documented'] },
+                    { section: 'Leadership', items: ['Leadership commitment demonstrated', 'Quality policy established', 'Roles & responsibilities assigned'] },
+                    { section: 'Planning', items: ['Risks and opportunities addressed', 'Quality objectives planned', 'Change management in place'] },
+                    { section: 'Support', items: ['Resources provided', 'Personnel competence ensured', 'Document control effective'] },
+                    { section: 'Operation', items: ['Operational controls in place', 'Product requirements met', 'Nonconforming outputs controlled'] },
+                    { section: 'Performance Evaluation', items: ['Monitoring & measurement done', 'Internal audits conducted', 'Management review performed'] },
+                    { section: 'Improvement', items: ['Corrective actions taken', 'Continual improvement demonstrated'] },
+                ],
+                'HACCP': [
+                    { section: 'HACCP Team & Prerequisites', items: ['HACCP team assembled', 'Product description documented', 'Flow diagram verified'] },
+                    { section: 'Hazard Analysis', items: ['Biological hazards identified', 'Chemical hazards identified', 'Physical hazards identified', 'Preventive measures determined'] },
+                    { section: 'Critical Control Points', items: ['CCPs identified', 'Critical limits established', 'Monitoring procedures set'] },
+                    { section: 'Corrective & Verification', items: ['Corrective actions defined', 'Verification activities conducted', 'Records maintained'] },
+                    { section: 'Hygiene & Sanitation', items: ['Personal hygiene maintained', 'Cleaning schedule followed', 'Pest control implemented', 'Temperature controls maintained'] },
+                ],
+                'ISO 14001': [
+                    { section: 'Environmental Context', items: ['Environmental issues identified', 'Interested parties identified', 'EMS scope defined'] },
+                    { section: 'Environmental Planning', items: ['Environmental aspects identified', 'Compliance obligations met', 'Environmental objectives set'] },
+                    { section: 'Environmental Controls', items: ['Waste management in place', 'Air emissions controlled', 'Water discharge monitored', 'Energy consumption tracked', 'Chemical handling compliant'] },
+                    { section: 'Emergency & Monitoring', items: ['Emergency preparedness for env. incidents', 'Noise pollution within limits', 'Environmental performance evaluated'] },
+                ],
+                'Food Safety': [
+                    { section: 'Facility', items: ['Building structure intact', 'Floors/walls/ceilings clean', 'Adequate lighting', 'Ventilation adequate', 'Hand washing stations available'] },
+                    { section: 'Raw Materials', items: ['Incoming inspection done', 'Storage temps monitored', 'FIFO/FEFO followed', 'Allergen management in place'] },
+                    { section: 'Personnel', items: ['PPE worn correctly', 'Health screening records', 'Food safety training provided'] },
+                    { section: 'Traceability', items: ['Traceability system in place', 'Recall procedure tested', 'Batch coding effective'] },
+                ],
+                'Fire Safety': [
+                    { section: 'Prevention', items: ['Fire risk assessment done', 'Electrical installations inspected', 'Flammable materials stored properly'] },
+                    { section: 'Detection & Alarm', items: ['Fire alarm operational', 'Smoke detectors working', 'Manual call points accessible'] },
+                    { section: 'Equipment', items: ['Fire extinguishers serviced', 'Hydrants/hose reels operational', 'Sprinkler system functional'] },
+                    { section: 'Evacuation', items: ['Emergency exits marked', 'Evacuation plan posted', 'Fire drills conducted', 'Emergency lighting operational'] },
+                ],
+                'ISO 22000': [
+                    { section: 'Food Safety Management', items: ['FSMS scope defined', 'Food safety policy established', 'FSMS planning complete'] },
+                    { section: 'Prerequisite Programs', items: ['PRPs established', 'Infrastructure adequate', 'Pest control implemented'] },
+                    { section: 'Hazard Analysis', items: ['Hazard assessment done', 'Control measures validated', 'Traceability system operational'] },
+                ],
+            };
+
+            const checklist = checklists[type];
+            if (!checklist) {
+                area.innerHTML = '<h3 style="color:var(--gray)">📋 Select a standard to load checklist...</h3>';
+                return;
+            }
+
+            area.innerHTML = `<h3 style="margin-bottom:15px">✅ ${type} Compliance Checklist</h3>` +
+                checklist.map(section => `
+                    <div class="checklist-section">
+                        <h4>${section.section}</h4>
+                        ${section.items.map(item => `
+                            <div class="checklist-item">
+                                <input type="checkbox">
+                                <label>${item}</label>
+                                <select>
+                                    <option value="Compliant">✅ Compliant</option>
+                                    <option value="Non-Compliant">❌ Non-Compliant</option>
+                                    <option value="Observation">⚠️ Observation</option>
+                                    <option value="N/A">➖ N/A</option>
+                                </select>
+                                <input type="text" placeholder="Remarks...">
+                            </div>
+                        `).join('')}
+                    </div>
+                `).join('');
+        }
+
+        // ================================
+        // TABS
+        // ================================
+        function switchTab(prefix, tabId) {
+            const parent = document.getElementById(`${prefix}-${tabId}`).parentElement;
+            parent.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById(`${prefix}-${tabId}`).classList.add('active');
+
+            // Update tab buttons
+            const tabContainer = parent.querySelector('.tabs') || document.querySelector('.tabs');
+            if (tabContainer) {
+                tabContainer.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                event.target.classList.add('active');
+            }
+        }
+
+        // ================================
+        // GPS FUNCTIONS
+        // ================================
+        function captureGPS(context) {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const lat = position.coords.latitude.toFixed(4);
+                        const lng = position.coords.longitude.toFixed(4);
+                        const accuracy = position.coords.accuracy.toFixed(0);
+
+                        if (context === 'inspection') {
+                            document.getElementById('inspGpsIcon').classList.add('active');
+                            document.getElementById('inspGpsStatus').textContent = '✅ Location captured successfully!';
+                            document.getElementById('inspGpsCoords').textContent = `Lat: ${lat}, Lng: ${lng} (±${accuracy}m)`;
+                        } else if (context === 'attendance') {
+                            document.getElementById('attendGpsIcon').classList.add('active');
+                            document.getElementById('gpsStatusText').textContent = '✅ Location Captured!';
+                            document.getElementById('gpsCoordText').textContent = `Lat: ${lat}, Lng: ${lng} (±${accuracy}m)`;
+                        } else if (context === 'location') {
+                            document.getElementById('locLat').value = lat;
+                            document.getElementById('locLng').value = lng;
+                        }
+
+                        showToast(`GPS captured: ${lat}, ${lng}`, 'success');
+                    },
+                    (error) => {
+                        // Fallback with simulated coordinates
+                        const lat = (24 + Math.random() * 10).toFixed(4);
+                        const lng = (67 + Math.random() * 8).toFixed(4);
+
+                        if (context === 'inspection') {
+                            document.getElementById('inspGpsIcon').classList.add('active');
+                            document.getElementById('inspGpsStatus').textContent = '📍 Simulated location (demo mode)';
+                            document.getElementById('inspGpsCoords').textContent = `Lat: ${lat}, Lng: ${lng}`;
+                        } else if (context === 'attendance') {
+                            document.getElementById('attendGpsIcon').classList.add('active');
+                            document.getElementById('gpsStatusText').textContent = '📍 Simulated Location (Demo)';
+                            document.getElementById('gpsCoordText').textContent = `Lat: ${lat}, Lng: ${lng}`;
+                        } else if (context === 'location') {
+                            document.getElementById('locLat').value = lat;
+                            document.getElementById('locLng').value = lng;
+                        }
+
+                        showToast(`Demo GPS: ${lat}, ${lng}`, 'info');
+                    }
+                );
+            } else {
+                showToast('GPS not supported in this browser', 'error');
+            }
+        }
+
+        let checkInTime = null;
+
+        function gpsCheckIn() {
+            const site = document.getElementById('attendSite').value;
+            if (!site) {
+                showToast('Please select a site first', 'error');
+                return;
+            }
+
+            captureGPS('attendance');
+            checkInTime = new Date();
+            document.getElementById('checkoutBtn').disabled = false;
+
+            const mapContainer = document.getElementById('mapContainer');
+            mapContainer.innerHTML = `
+                <div style="text-align:center;padding-top:80px">
+                    <div style="font-size:60px">📍</div>
+                    <h3 style="margin-top:10px;color:var(--success)">Checked In!</h3>
+                    <p>${site}</p>
+                    <p style="font-size:12px;color:var(--gray)">${checkInTime.toLocaleString()}</p>
+                </div>
+            `;
+
+            showToast(`Checked in at ${site}`, 'success');
+        }
+
+        function gpsCheckOut() {
+            if (!checkInTime) return;
+
+            const checkOutTime = new Date();
+            const duration = Math.round((checkOutTime - checkInTime) / 60000);
+            const hours = Math.floor(duration / 60);
+            const mins = duration % 60;
+
+            const site = document.getElementById('attendSite').value;
+            const gpsText = document.getElementById('gpsCoordText').textContent;
+
+            DB.attendance.unshift({
+                date: new Date().toISOString().split('T')[0],
+                auditor: currentUser.name,
+                site: site,
+                checkIn: checkInTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                checkOut: checkOutTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+                duration: `${hours}h ${mins}m`,
+                gps: gpsText.replace('Lat: ', '').replace('Lng: ', '').split('(')[0].trim(),
+                status: 'Completed'
+            });
+
+            renderAttendance();
+            document.getElementById('checkoutBtn').disabled = true;
+            checkInTime = null;
+
+            document.getElementById('attendGpsIcon').classList.remove('active');
+            document.getElementById('gpsStatusText').textContent = 'Location Not Captured';
+            document.getElementById('gpsCoordText').textContent = "Click 'Check-In' to capture GPS";
+
+            showToast(`Checked out! Duration: ${hours}h ${mins}m`, 'success');
+        }
+
+        // ================================
+        // SAVE FUNCTIONS
+        // ================================
+        function saveCustomer() {
+            const name = document.getElementById('custName').value;
+            const domain = document.getElementById('custDomain').value;
+            const contact = document.getElementById('custContact').value;
+            const email = document.getElementById('custEmail').value;
+
+            if (!name || !contact || !email) {
+                showToast('Please fill required fields', 'error');
+                return;
+            }
+
+            DB.customers.push({
+                id: 'CUS-' + String(nextCustId++).padStart(3, '0'),
+                name, domain, contact, email,
+                phone: document.getElementById('custPhone').value,
+                location: document.getElementById('custLocation').value,
+                lat: document.getElementById('custLat').value,
+                lng: document.getElementById('custLng').value,
+                status: 'Active', inspections: 0, lastScore: null
+            });
+
+            renderCustomers();
+            closeModal('customerModal');
+            document.getElementById('totalCustomers').textContent = DB.customers.length;
+            showToast('Customer added successfully!', 'success');
+        }
+
+        function savePayment() {
+            const customer = document.getElementById('payCustomer').value;
+            const amount = document.getElementById('payAmount').value;
+
+            if (!customer || !amount) {
+                showToast('Please fill required fields', 'error');
+                return;
+            }
+
+            DB.payments.unshift({
+                id: 'INV-' + String(DB.payments.length + 1).padStart(3, '0'),
+                customer,
+                inspection: 'General',
+                amount: parseFloat(amount),
+                date: document.getElementById('payDate').value || new Date().toISOString().split('T')[0],
+                method: document.getElementById('payMethod').value,
+                status: document.getElementById('payStatus').value
+            });
+
+            renderPayments();
+            closeModal('paymentModal');
+            showToast('Payment recorded successfully!', 'success');
+        }
+
+        function saveLocation() {
+            const customer = document.getElementById('locCustomer').value;
+            const siteName = document.getElementById('locSiteName').value;
+            const lat = document.getElementById('locLat').value;
+            const lng = document.getElementById('locLng').value;
+
+            if (!customer || !siteName || !lat || !lng) {
+                showToast('Please fill required fields', 'error');
+                return;
+            }
+
+            DB.locations.push({
+                customer, site: siteName,
+                address: document.getElementById('locAddress').value,
+                lat, lng,
+                radius: parseInt(document.getElementById('locRadius').value) || 200,
+                auditor: document.getElementById('locAuditor').value,
+                status: 'Active'
+            });
+
+            renderLocations();
+            closeModal('locationModal');
+            showToast('Location added successfully!', 'success');
+        }
+
+        function saveUser() {
+            const name = document.getElementById('userName').value;
+            const email = document.getElementById('userEmail').value;
+
+            if (!name || !email) {
+                showToast('Please fill required fields', 'error');
+                return;
+            }
+
+            DB.users.push({
+                id: 'USR-' + String(DB.users.length + 1).padStart(3, '0'),
+                name, email,
+                role: document.getElementById('userRoleSelect').value.charAt(0).toUpperCase() + document.getElementById('userRoleSelect').value.slice(1),
+                phone: document.getElementById('userPhone').value,
+                lastLogin: 'Never',
+                status: 'Active'
+            });
+
+            renderUsers();
+            closeModal('userModal');
+            showToast('User added successfully!', 'success');
+        }
+
+        // ================================
+        // MODAL FUNCTIONS
+        // ================================
+        function openModal(id) {
+            document.getElementById(id).classList.add('show');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('show');
+        }
+
+        // Close modal on overlay click
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('show');
+                }
+            });
+        });
+
+        // ================================
+        // TOAST NOTIFICATIONS
+        // ================================
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const icons = { success: '✅', error: '❌', warning: '⚠️', info: 'ℹ️' };
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<span style="font-size:18px">${icons[type]}</span><span>${message}</span>`;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // ================================
+        // REPORTS
+        // ================================
+        function generateReport() {
+            const type = document.getElementById('reportType').value;
+            showToast(`Generating ${type}...`, 'info');
+
+            setTimeout(() => {
+                showToast(`${type} generated successfully! Ready for download.`, 'success');
+            }, 1500);
+        }
+
+        // ================================
+        // TREND ANALYSIS
+        // ================================
+        function updateTrends() {
+            const customer = document.getElementById('trendCustomer').value;
+            const type = document.getElementById('trendType').value;
+
+            // Simulate trend data update
+            showToast('Trend data updated', 'info');
+        }
+
+        // ================================
+        // NOTIFICATIONS
+        // ================================
+        function showNotifications() {
+            alert('📢 Notifications:\n\n1. ⚠️ Delta Foods HACCP re-inspection due\n2. 💳 Beta Manufacturing payment pending\n3. 📋 New inspection scheduled for Omega Foods');
+        }
+
+        // ================================
+        // SET DEFAULT DATE
+        // ================================
+        window.addEventListener('load', () => {
+            const today = new Date().toISOString().split('T')[0];
+            if (document.getElementById('inspDate')) document.getElementById('inspDate').value = today;
+            if (document.getElementById('payDate')) document.getElementById('payDate').value = today;
+            if (document.getElementById('reportFrom')) {
+                const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+                document.getElementById('reportFrom').value = thirtyDaysAgo;
+                document.getElementById('reportTo').value = today;
+            }
+        });
+    </script>
+</body>
+</html>
